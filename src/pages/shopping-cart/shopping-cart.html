@@ -1,0 +1,138 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title> Cart </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+
+   <div *ngIf="cartEmpty == true">
+      <h2> No items in Cart </h2>
+  </div>
+
+<div *ngIf="cartEmpty == false">
+
+  <div id="resContainer">
+    <!--<div>
+      <ion-img src=""></ion-img>
+    </div>-->
+    
+    <div>
+      
+      <ion-list no-lines id ="resDetails">
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img [src]="imgUrlRes">
+              <!--<img src="">-->
+            </ion-thumbnail>
+            <h2> {{resDetails.name}} </h2>
+            <p *ngFor="let resCusine of resCusines" id="cuisine_names"> {{resCusine.cuisine_name}} </p>
+            <p> 
+              <span><ion-icon name="car"></ion-icon> Delivery</span> 
+              <span><ion-icon name="basket"></ion-icon> Pickup</span> 
+            </p>
+            <p> Open Now </p>
+          </ion-item>
+      </ion-list>
+
+    </div>
+  </div>
+
+
+
+   <!--<ion-list>
+
+      <ion-item *ngFor="let foodItem of foodItems; let i = index" [attr.data-index]="i"> 
+       
+       <h2 padding-bottom="1" > {{foodItem.details.food.name}} </h2>
+       <p>
+         Qty:{{foodItem.quantity}}   Price: ${{foodItem.details.food.price}} 
+      </p>
+      <button ion-button clear item-end (click)="addQuantity(foodItem,i)"><ion-icon ios="ios-add-circle" md="md-add-circle"></ion-icon></button>
+      <button ion-button clear item-end (click)="subtractQuantity(foodItem,i)"><ion-icon ios="ios-remove-circle" md="md-remove-circle"></ion-icon></button>
+      <button ion-button clear item-end (click)="removeDish(foodItem,i)"><ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon></button>
+     </ion-item>
+
+     
+    </ion-list>-->
+
+    <ion-list padding-top="5">
+      <ion-item-sliding *ngFor="let foodItem of foodItems; let i = index" [attr.data-index]="i">
+        <ion-item >
+          <h2>{{foodItem.details.food.name}}</h2>
+           <p padding-top="1">
+             Qty:{{foodItem.quantity}}   Price: ${{foodItem.details.food.price}} 
+          </p>
+        </ion-item>
+        <ion-item-options side="right"> 
+          <button ion-button color="secondary" (click)="addQuantity(foodItem,i)">
+            <ion-icon ios="ios-add-circle" md="md-add-circle"></ion-icon>
+            Add
+          </button>
+          <button ion-button color="dark">
+            <ion-icon ios="ios-remove-circle" md="md-remove-circle" (click)="subtractQuantity(foodItem,i)"></ion-icon>
+            Sub
+          </button>
+        </ion-item-options>
+
+        <ion-item-options side="left">
+         <button ion-button color="danger" (click)="removeDish(foodItem,i)">
+           <ion-icon name="trash"></ion-icon>
+            Remove
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+
+    <!--<ion-grid>
+      <ion-row padding>
+        <ion-col col-4>Dish</ion-col>
+        <ion-col col-4 text-center>Qty</ion-col>
+        <ion-col col-4 text-center>Price</ion-col>
+        
+      </ion-row>
+      <ion-row *ngFor="let foodItem of foodItems; let i = index" [attr.data-index]="i" padding>
+        <ion-col col-4>{{foodItem.details.food.name}} </ion-col>
+        <ion-col col-4 text-center>{{foodItem.quantity}} </ion-col>
+        <ion-col col-4 text-center>{{foodItem.details.food.price}}</ion-col>
+      </ion-row>
+    </ion-grid>-->
+
+  
+   <ion-list padding>
+    <ion-item>
+        <div id="totalInfo">
+          <h3>Subtotal: <span>${{items.subtotal}}</span></h3>
+          <h3>Tax: <span>${{items.tax}}</span></h3>
+          <h3>Total: <span>${{items.total}}</span></h3>
+        </div>
+      </ion-item>
+     </ion-list>
+
+     <div id ="buttons">
+      <ion-list  radio-group no-lines>
+        <ion-item>
+          <ion-label>Delivery</ion-label>
+          <ion-radio checked="true"  name = "pickupOption" (click)="checkDelivery(1)"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Pickup</ion-label>
+          <ion-radio  name = "deliveryOption" (click)="checkDelivery(2)"></ion-radio>
+        </ion-item>
+      </ion-list>
+   </div>
+
+    <button ion-button full *ngIf="!delivery" (click)="onCheckOut(items.total)">Proceed To Checkout (${{items.total}})</button>
+    <button ion-button full *ngIf="delivery" (click)="onCheckOut(finalTotal)">Proceed To Checkout (${{finalTotal}})</button>
+
+  </div>
+
+ 
+
+</ion-content>

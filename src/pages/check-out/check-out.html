@@ -1,0 +1,140 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title text-center>Checkout</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <h4 padding text-center>{{resName}}</h4>
+
+  <form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+
+      <input type="hidden" name="restaurant_id" [(ngModel)]="resId" />
+      <input type="hidden" name="subtotal" [(ngModel)]="subtotal" />
+      <input type="hidden" name="tax" [(ngModel)]="tax" />
+      <input type="hidden" name="total" [(ngModel)]="cartPrice" />
+
+
+      <ion-list>
+        <ion-list-header>
+          <ion-toolbar text-center> <h3> Contact Details </h3> </ion-toolbar>    
+          </ion-list-header>
+        <ion-item>
+          <ion-label fixed>Name:</ion-label>
+          <ion-input type="text" name="name" ngModel required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label fixed>Email:</ion-label>
+          <ion-input type="email" name="email" ngModel required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label fixed>Phone:</ion-label>
+          <ion-input type="number" name="phone" ngModel required></ion-input>
+        </ion-item>
+
+    </ion-list>
+
+    <div id ="buttons">
+          <ion-list  radio-group no-lines ngModel name="order" required>
+            <ion-item>
+              <ion-label>Pickup</ion-label>
+              <ion-radio name = "pickupOption" value="Pickup" checked={{!deliverFlag}} (click)="checkDelivery(1)"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Delivery</ion-label>
+              <ion-radio  name = "deliveryOption" value="Delivery" checked={{deliverFlag}} (click)="checkDelivery(2)"></ion-radio>
+            </ion-item>
+          </ion-list>
+      </div>
+
+    <ion-list>
+      <ion-list-header>
+              <ion-toolbar text-center> <h3> Order Date & Time </h3> </ion-toolbar> 
+      </ion-list-header> 
+      <ion-item>
+        <ion-label>Order Date</ion-label>
+        <ion-select [(ngModel)]="orderDay" multiple="false" name="pre_order_date" (ngModelChange)="onCheck($event)">
+          <ion-option *ngFor="let pre_order_day of pre_order_days"  value={{pre_order_day.value}} [disabled]="pre_order_day.disabled" required>{{pre_order_day.days}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Time</ion-label>
+        <ion-select [(ngModel)]="time" multiple="false" name="pre_order_time" [disabled]="!orderDay">
+          <ion-option *ngFor="let pre_order_time of pre_order_times"  value={{pre_order_time.timing}} [disabled]="pre_order_time.is_break" text-center required>{{pre_order_time.timing}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngIf="deliverFlag == true">
+        <ion-list-header>
+              <ion-toolbar text-center> <h3> Delivery Details </h3> </ion-toolbar> 
+          </ion-list-header>
+
+        <ion-item>
+        <ion-label> Staying In Hotel?</ion-label>
+        <ion-toggle checked="false" [(ngModel)]="stayingInHotel" name="in_hotel"></ion-toggle>
+      </ion-item>  
+
+
+      <ion-list *ngIf="!stayingInHotel">
+        <ion-item>
+          <ion-label fixed>House No:</ion-label>
+          <ion-input type="text" name="house_no" ngModel required></ion-input>
+        </ion-item>
+
+        <!--<ion-item>-->
+          <!--<ion-label fixed>Address:</ion-label>-->
+          <!--<ion-input type="text" name="houseAddress" ngModel required></ion-input>-->
+           <input type="text" class="form-control addressBar" placeholder="Location:" name="Location"  #LocationCtrl="ngModel"
+          Googleplace ngModel>
+          <hr id="divide"/>
+        <!--</ion-item>-->
+
+        <ion-item>
+          <ion-label clear>Delivery Instructions:</ion-label>
+          <ion-input type="textarea" name="instructions" ngModel required></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-list *ngIf="stayingInHotel">
+        <ion-item>
+          <ion-label fixed>Room No:</ion-label>
+          <ion-input type="text" name="house_no" ngModel required></ion-input>
+        </ion-item>
+        
+          <ion-item>
+          <ion-label>Hotel</ion-label>
+          <ion-select [(ngModel)]="nearByHotelName" multiple="false" name="hotel" (ngModelChange)="onHotelSelected($event)">
+            <ion-option *ngFor="let nearByHotel of nearByHotels"  value={{nearByHotel.hotels.id}} required>{{nearByHotel.hotels.Name}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label fixed>Address:</ion-label>
+          <ion-input type="text" value={{nearByHotelAddress}} name="hotelAddress" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label clear>Delivery Instructions:</ion-label>
+          <ion-input type="text" name="deliveryInstructions"></ion-input>
+        </ion-item>
+      </ion-list>
+
+
+    </ion-list>
+
+ 
+
+  <button ion-button full type="submit" [disabled] = "!form.form.valid">Proceed {{$cartPrice}}</button>
+
+  </form>
+
+
+
+</ion-content>

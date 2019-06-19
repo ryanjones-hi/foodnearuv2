@@ -1,0 +1,92 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{restaurantName}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+    <ion-item no-lines>
+      <ion-thumbnail item-start>
+        <img [src]="getImgUrl(resDetails)"> 
+       </ion-thumbnail>
+        <h2>{{resDetails.name}}</h2>
+        <p>{{resDetails.address}}</p>
+        <p>{{resDetails.city}}, {{resDetails.state}}, {{resDetails.zipcode}}</p>
+        <p>Delivery, Pickup</p>
+      </ion-item>
+
+        <hr />
+
+      <div padding>
+          <ion-segment [(ngModel)]="category">
+            <ion-segment-button value="Menu" selected>
+              Menu
+            </ion-segment-button>
+            <ion-segment-button value="Info">
+              Info
+            </ion-segment-button>
+          </ion-segment>
+      </div>
+
+
+        <div [ngSwitch]="category">
+          
+          <ion-list *ngSwitchCase="'Menu'">
+              <ion-item>
+                <ion-label><ion-icon name="search"></ion-icon> Search</ion-label>
+                <ion-input type="text" [(ngModel)] = "term" name = "searchTerm"></ion-input>
+              </ion-item> 
+              
+                <button ion-item *ngFor="let resMenu of resMenus | filterDish:term " (click)="onSlectMenu(resMenu)">
+                {{resMenu.category.name}}
+
+                  <div *ngIf="showDetails">
+                      <ion-item *ngFor="let menu of resMenu.menu">
+                        <ion-thumbnail item-start>
+                          <img src="../../assets/icon/defaultDishImg.png"> 
+                        </ion-thumbnail>
+                        <h2>{{menu.food.name}}</h2>
+                        <p>{{menu.food.price | currency:'USD':true}}</p>
+                        <p>{{menu.food.description}}</p>
+                        <button (click)="onDishSelect(menu)" ion-button clear item-end>View</button>
+                      </ion-item>
+                  </div>
+                
+                </button>
+          </ion-list>
+          <ion-list *ngSwitchCase="'Info'" no-lines>
+            <ion-item> 
+              
+                  <ion-item>
+                      <agm-map [latitude]="lat" [longitude]="lng" [zoom]=14>
+                        <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                      </agm-map>
+                  </ion-item>
+            
+
+          </ion-item>
+          </ion-list>
+          <ion-list *ngSwitchCase="'Info'">
+            <ion-item>
+            
+                <ion-list-header>
+                  Daily Timings
+                </ion-list-header>          
+                    <ion-item *ngFor="let resTiming of resTimings">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col col-5><p>{{resTiming.days}}:</p></ion-col>
+                          <ion-col col-7><p>{{tConvert(resTiming.start_time)}} - {{tConvert(resTiming.stop_time)}}</p></ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>  
+            </ion-item>
+            
+          </ion-list>
+        </div>
+
+</ion-content>

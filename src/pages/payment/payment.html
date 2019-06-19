@@ -1,0 +1,145 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title> Payment</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <h4 text-center padding> Your Order Details </h4>
+
+    <ion-grid padding>
+      <ion-row>
+        <ion-col col-6>Subtotal: </ion-col>
+        <ion-col col-6 text-right>${{userData.subtotal}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>Tax: </ion-col>
+        <ion-col col-6 text-right>${{userData.tax}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="tip"> 
+        <ion-col col-6>Tip: </ion-col>
+        <ion-col col-6 text-right>${{calculatedTip}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="invalidCoupon == false"> 
+        <ion-col col-6>Coupon: </ion-col>
+        <ion-col col-6 text-right> - ${{couponValue}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>Total: </ion-col>
+        <ion-col col-6 text-right>${{newTotal}}</ion-col>
+      </ion-row>
+    </ion-grid>
+
+        <ion-item no-lines>
+          <ion-label fixed>Tip: ${{calculatedTip}}</ion-label>
+         
+        </ion-item>
+
+    
+         <ion-item no-lines>
+              <ion-range [(ngModel)]="tip" min="0" max="100" value="0" step="5" snaps="true" (ngModelChange)="calculateTip()">
+                <ion-icon range-left name="logo-usd"></ion-icon>
+                <!--<ion-icon  name="sunny"></ion-icon>-->
+                 <ion-badge range-right item-end>%{{tip}}</ion-badge>
+              </ion-range>
+          </ion-item>
+    <hr />
+
+      <form #form = "ngForm" (ngSubmit)="onCompleteOrder(form.value)">
+
+         <input type="hidden" name="tip_val" [(ngModel)]="calculatedTip" value={{calculatedTip}}/>
+          <input type="hidden" name="addressEditable" ngModel/>
+          <input type="hidden" name="pre_total" ngModel/>
+          <input type="hidden" name="order_track" ngModel/>
+          
+          
+            <ion-item no-lines padding *ngIf="!promoDisable">
+              <ion-label>Have a Coupon/Promo Code?</ion-label>
+              <ion-checkbox color="dark" [(ngModel)]="promoCode" name="isPromoCode"></ion-checkbox>
+            </ion-item>
+
+            <ion-grid *ngIf="promoCode" padding>
+              <form #form="ngForm" (ngSubmit)="onSubmitPromo(form.value)">
+                <ion-row>
+                  <ion-col col-8><ion-input type="text" value={{couponCode}} placeholder="Enter a Promo Code" name="is_coupon" ngModel></ion-input></ion-col>
+                  <ion-col col-4><button ion-button outline>Apply</button></ion-col>
+                </ion-row>
+              </form> 
+            </ion-grid>
+
+            <ion-grid *ngIf="!invalidCoupon" padding>
+                <ion-row>
+                  <ion-col col-12 text-center id="message">{{errMsg}}</ion-col>
+                </ion-row>    
+            </ion-grid>
+
+            <ion-grid *ngIf="invalidCoupon" padding>
+                <ion-row>
+                  <ion-col col-12 text-center id="errmessage">{{errMsg}}</ion-col>
+                </ion-row>    
+            </ion-grid>
+
+            <ion-item no-lines >
+              <ion-label>Have a Gift Card?</ion-label>
+              <ion-checkbox color="dark" [(ngModel)]="giftCard" name="is_giftcard"></ion-checkbox>
+            </ion-item>
+
+
+            <ion-grid *ngIf="giftCard" padding>
+                 <form #form="ngForm" (ngSubmit)="onSubmitGift(form.value)">
+                    <ion-row>
+                      <ion-col col-8><ion-input type="text" value={{giftCardValue}} placeholder="Enter a Code" name="gift_card_val" ngModel></ion-input></ion-col>
+                      <ion-col col-4><button ion-button outline type="submit">Apply</button></ion-col>
+                    </ion-row>
+                </form> 
+              </ion-grid>
+
+              <ion-grid *ngIf="invalidGiftCard == true" padding>
+                <ion-row>
+                  <ion-col col-12 text-center id="errmessage">{{giftCardErrMsg}}</ion-col>
+                </ion-row>    
+            </ion-grid>
+
+            <hr />
+
+            <h5 padding text-center> Payment Method</h5> 
+
+            <ion-list radio-group [(ngModel)]="paymentMethod" name="payment" no-lines> 
+                <ion-item>
+                  <ion-label><ion-icon name="logo-usd"></ion-icon> Cash on Delivery</ion-label>
+                  <ion-radio checked="true" value="Cash" (click)="payment()"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label><ion-icon name="card"></ion-icon> Credit Card</ion-label>
+                  <ion-radio value="Credit" (click)="payment()"></ion-radio>
+                </ion-item>
+            </ion-list>
+
+          
+
+            <ion-list *ngIf="cardFlag">
+              <ion-item>
+                <ion-label color="primary">Card number: </ion-label>
+                <ion-input type="number" placeholder="" name="cardno" ngModel></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label color="primary">Exp: </ion-label>
+                <ion-input type="text" placeholder="" name="exp" ngModel></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label color="primary">CVV: </ion-label>
+                <ion-input type="number" placeholder="" name="cvv" ngModel></ion-input>
+              </ion-item>
+            </ion-list>
+
+
+            <button ion-button full type="submit">Complete Order</button>
+
+  </form>
+    
+</ion-content>

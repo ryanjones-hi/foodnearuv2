@@ -1,0 +1,25 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Select Your Area</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <ion-label><ion-icon name="search"></ion-icon> Search</ion-label>
+      <ion-input type="text" [(ngModel)] = "term" name = "searchTerm"></ion-input>
+    </ion-item>
+
+    <button ion-item *ngFor="let city of cities | filterByName:term " (click)="onSelectLoc(city)">
+       {{city.City}}, {{city.StateCode}} {{city.ZIPCode}} 
+  
+    </button>
+</ion-list>
+
+</ion-content>

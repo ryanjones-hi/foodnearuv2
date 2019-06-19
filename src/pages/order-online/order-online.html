@@ -1,0 +1,51 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Order Online</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  
+  <ion-list id="listContent" *ngIf="isService">
+
+    <ion-list-header>
+      <ion-toolbar > <h2 text-center>Open Restaurants</h2> </ion-toolbar>
+    </ion-list-header>
+
+    <!--<ion-item>
+      <ion-label><ion-icon name="search"></ion-icon> Search</ion-label>
+      <ion-input type="text" [(ngModel)] = "term" name = "searchTerm"></ion-input>
+    </ion-item>-->
+    
+    <button ion-item *ngFor="let hotelNearMe of hotelsNearMe" (click)="onSelectRes(hotelNearMe)">
+        <ion-thumbnail item-start>
+          <img [src]="getImgUrl(hotelNearMe)"> 
+      </ion-thumbnail>
+        <h2>{{hotelNearMe.Restaurant.name}}</h2>
+        <p padding-bottom="1">{{get_cuisines(hotelNearMe.Restaurant_cuisines)}}</p>
+          
+        <p padding-bottom="1"><span *ngIf="hotelNearMe.Restaurant.delivery == 1 || hotelNearMe.Restaurant.is_third_party == 1" padding-right="5"> <ion-icon name="car"></ion-icon> Delivery</span> 
+            <span *ngIf="hotelNearMe.Restaurant.pickup == 1"> <ion-icon name="basket"></ion-icon> Pickup</span></p>
+        <p>
+            <ion-icon name="locate"></ion-icon> {{hotelNearMe.Restaurant.distance | truncate: 4}} mi 
+            <span padding-left="5" *ngIf="hotelIsOpen == true"><ion-icon name="checkmark-circle"></ion-icon> Open Now</span>
+            <span padding-left="5" *ngIf="hotelIsOpen == false"><ion-icon name="checkmark-circle"></ion-icon> Opens at {{getTodaysOpeningTime(hotelNearMe.Restaurant_timings,hotelNearMe.Restaurant.id)}}</span>
+            
+        </p> 
+    </button>
+
+  </ion-list>
+
+  <ion-list id="listContent" *ngIf="isService == false">
+
+    
+       <h4 text-center paddingTop=50>We are Sorry. We do not provide service near this area.</h4>
+    
+
+  </ion-list>
+
+</ion-content>

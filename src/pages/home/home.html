@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title text-center>Foodnearu</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="background">
+  
+  <ion-card class="card"> 
+    <ion-list no-lines> 
+
+      <ion-item>
+        <!--<ion-input type="text" value="" placeholder="Start searching by address"></ion-input>-->
+        <!--<form #form = "ngForm" (ngSubmit)="getAddressOnChange(form.value)">-->
+          <input type="text" class="form-control addressBar" placeholder="Address:" name="Location" [(ngModel)]="address" #LocationCtrl="ngModel"
+            Googleplace (setAddress)="getAddressOnChange($event,LocationCtrl)">
+          <!--<button type="submit"ion-button clear item-right>View</button>-->
+          <hr id="divide"/>
+        <!--</form>-->
+
+      </ion-item>
+
+      <button ion-item (click)="getUserLocation()">
+        <ion-icon  name="navigate" item-left></ion-icon>
+        <h3>Nearby</h3>
+      </button> 
+      <button ion-item [navPush]="searchByAreaPage">
+        <ion-icon  name="search" item-left ></ion-icon>
+        <h3>Search by location</h3>
+      </button>  
+
+      <button ion-item [navPush]="pay">
+         <ion-icon name="locate" item-left></ion-icon>
+        <h3>Track Order</h3>
+      </button>  
+      
+    </ion-list>
+  </ion-card>
+  
+
+</ion-content>

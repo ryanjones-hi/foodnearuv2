@@ -1,0 +1,74 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Dish Details</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <ion-thumbnail item-start>
+      <img src=""> 
+    </ion-thumbnail>
+    <h4 text-center>
+      {{dishDetails.name}}
+    </h4>
+    <p text-center>
+      {{dishDetails.description}}
+    </p>
+
+    <hr />
+
+ <form #myForm='ngForm' (ngSubmit)='addToCart(myForm.value)'>
+
+   <input type="hidden" name="fid" value={{dishDetails.id}} ngModel/>
+  
+        <ion-list no-lines padding>
+            <ion-item>
+              <ion-label fixed>Quantity: </ion-label>
+              <ion-input type="number" min="1" value="1" name="quantity" [(ngModel)]="quantity" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label fixed>Instructions: </ion-label>
+              <ion-input type="text" name="instructions" [(ngModel)]="instructions" ></ion-input>
+            </ion-item>
+          </ion-list>
+      
+  <div *ngIf="modifiersPresent == true">
+
+    <ion-list radio-group>
+        <!--<ion-list-header>
+          {{modifiersObj.name}}
+        </ion-list-header>-->
+
+      <ion-item *ngIf="radioFlag == true">
+        <ion-label>{{modifiersObj.name}}</ion-label>
+        <ion-select [(ngModel)]="modifiers" multiple="false" name={{cat_lavel}}>
+          <ion-option *ngFor="let item of choicesObj"  value={{item.id}} >{{item.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+       <ion-item *ngIf="checkboxFlag == true">
+        <ion-label>{{modifiersObj.name}}</ion-label>
+        <ion-select [(ngModel)]="modifiers" multiple="true" name={{cat_lavel}}>
+          <ion-option *ngFor="let item of choicesObj"  value={{item.id}} >{{item.name}} (${{item.price}})</ion-option>
+        </ion-select>
+      </ion-item>
+
+       <!--<div *ngIf="checkboxFlag == true">
+          <ion-item *ngFor="let item of choicesObj">
+            <ion-label>{{item.name}}</ion-label>
+            <ion-checkbox name="choices"  [(ngModel)]="choices"></ion-checkbox>
+          </ion-item>
+        </div>-->
+    </ion-list>
+    
+  </div>
+
+  <button [disabled] = "!myForm.form.valid" ion-button full>Add to Cart</button>
+
+  </form>
+
+</ion-content>
